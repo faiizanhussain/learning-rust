@@ -25,7 +25,9 @@ impl ParsePosNonzeroError {
         ParsePosNonzeroError::Creation(err)
     }
     // TODO: add another error conversion function here.
-    // fn from_parseint...
+    fn from_parseint(err: ParseIntError) -> ParsePosNonzeroError {
+        ParsePosNonzeroError::ParseInt(err)
+    }
 }
 
 fn parse_pos_nonzero(s: &str) -> Result<PositiveNonzeroInteger, ParsePosNonzeroError> {
@@ -57,9 +59,11 @@ impl PositiveNonzeroInteger {
 }
 
 #[cfg(test)]
+/// This module contains tests for the `parse_pos_nonzero` function.
 mod test {
     use super::*;
 
+    /// Test for parsing a non-number string.
     #[test]
     fn test_parse_error() {
         // We can't construct a ParseIntError, so we have to pattern match.
@@ -69,6 +73,7 @@ mod test {
         ));
     }
 
+    /// Test for parsing a negative number.
     #[test]
     fn test_negative() {
         assert_eq!(
@@ -77,6 +82,7 @@ mod test {
         );
     }
 
+    /// Test for parsing zero.
     #[test]
     fn test_zero() {
         assert_eq!(
@@ -85,6 +91,7 @@ mod test {
         );
     }
 
+    /// Test for parsing a positive number.
     #[test]
     fn test_positive() {
         let x = PositiveNonzeroInteger::new(42);
